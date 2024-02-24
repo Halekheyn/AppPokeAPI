@@ -10,4 +10,5 @@ export interface PokemonTable {
 export interface PokemonData {
   name: string;
   url:  string;
+  onEdition?: boolean;
 }

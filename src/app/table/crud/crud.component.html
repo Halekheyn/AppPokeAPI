@@ -1,1 +1,73 @@
-<p> {{ this.pokemonData | json}}</p>
+<div class="container">
+  <div class="row pt-5">
+    <div class="col col-md-12">
+
+      <!-- Tabla -->
+      <table class="table table-striped table-bordered ">
+        <thead >
+          <tr>
+            <th scope="col" class="bg-primary text-white">Nombre</th>
+            <th scope="col" class="bg-primary text-white">Detalle</th>
+            <th scope="col" class="bg-primary text-white">Editar</th>
+            <th scope="col" class="bg-primary text-white">Eliminar</th>
+          </tr>
+        </thead>
+        <tbody class="table-striped">
+          <tr *ngFor="let pokemon of pokemonData; let i = index">
+            <td>
+              <input *ngIf="pokemon.onEdition; else notEdit1" [(ngModel)]="pokemon.name">
+              <ng-template #notEdit1>{{ pokemon.name }}</ng-template>
+            </td>
+            <td>
+              <button type="button"
+                      class="btn btn-info btn-sm"
+                      [disabled]="pokemon.onEdition"
+                      (click)="pokemonDetail(i)">
+                <i class="fa-regular fa-eye"></i> Ver +
+              </button>
+            </td>
+            <td>
+              <button *ngIf="pokemon.onEdition; else editButton" (click)="pokemonCreate(i)">
+                <i class="fa-regular fa-floppy-disk"></i> Guardar
+              </button>
+              <ng-template #editButton>
+                <button type="button"
+                        class="btn btn-primary btn-sm"
+                        (click)="pokemonEdit(i)">
+                  <i class="fa-regular fa-pen-to-square"></i> Editar
+                </button>
+              </ng-template>
+            </td>
+            <td>
+              <button *ngIf="pokemon.onEdition; else editDelete" (click)="pokemonCancel(i)">
+                <i class="fa-regular fa-rectangle-xmark"></i> Cancelar
+              </button>
+              <ng-template #editDelete>
+                <button type="button"
+                        class="btn btn-danger btn-sm"
+                        (click)="pokemonDelete(i)">
+                  <i class="fa-regular fa-trash-can"></i> Eliminar
+                </button>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Fin Tabla -->
+
+      <!-- Paginación -->
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="pageTotal"
+          [(page)]="pageCurrent"
+          [pageSize]="pageLimit"
+          [maxSize]="4"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="pokemonPagination()"
+        >
+        </ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, of } from "rxjs";
+import { Observable, catchError, of, tap } from "rxjs";
 
 import { PokemonTable } from "../interfaces/pokemon-table.interface";
 
@@ -26,6 +26,7 @@ export class CrudService{
 
     return this.httpClient.get<PokemonTable>(url)
                .pipe(
+                  tap( ({ count, next, previous }) => console.log(count, next, previous)),
                   catchError(error => {
                     console.error('getPokemonRequest - catchError', error);
                     return of(null);

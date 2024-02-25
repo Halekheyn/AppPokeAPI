@@ -12,12 +12,12 @@ import { CrudService } from './crud.service';
 export class CrudComponent implements OnInit {
 
   public pokemonData!: PokemonData[];
+  public pokemonDataEdit : ( PokemonData | null )[] = [];
 
   public pageCurrent: number = 1;
 	public pageLimit: number = 10;
 	public pageOffset: number = 0;
 	public pageTotal: number = 0;
-
 
   constructor(private _crudService:CrudService ){}
 
@@ -46,7 +46,8 @@ export class CrudComponent implements OnInit {
   public pokemonEdit(index: number){
     console.log('pokemonEdit', index);
     this.pokemonData[index].onEdition = true;
-
+    this.pokemonDataEdit[index] = { ...this.pokemonData[index] }
+    console.table(this.pokemonDataEdit);
   }
 
   public pokemonDelete(index: number){
@@ -56,18 +57,24 @@ export class CrudComponent implements OnInit {
 
   public pokemonCreate(index: number){
     console.log('pokemonCreate', index);
-
+    this.pokemonData[index].onEdition = false;
+    this.pokemonDataEdit[index] = null;
+    console.table(this.pokemonDataEdit);
   }
 
   public pokemonCancel(index: number){
     console.log('pokemonCancel', index);
-
+    this.pokemonData[index] = { ...this.pokemonDataEdit[index]! };
+    this.pokemonData[index].onEdition = false;
+    this.pokemonDataEdit[index] = null;
+    console.table(this.pokemonDataEdit);
   }
 
   pokemonPagination() {
 		console.log(this.pageCurrent);
     this.pageOffset = (this.pageLimit * (this.pageCurrent - 1));
     this.pokemonList(this.pageLimit, this.pageOffset);
+    this.pokemonDataEdit = [];
 	}
 
   updateList(itemsLimit: string){

@@ -34,7 +34,10 @@
               </button>
             </td>
             <td>
-              <button *ngIf="pokemon.onEdition; else editButton" (click)="pokemonCreate(i)">
+              <button type="button"
+                      class="btn btn-success btn-sm"
+                      *ngIf="pokemon.onEdition; else editButton"
+                      (click)="pokemonCreate(i)">
                 <i class="fa-regular fa-floppy-disk"></i> Guardar
               </button>
               <ng-template #editButton>
@@ -46,7 +49,10 @@
               </ng-template>
             </td>
             <td>
-              <button *ngIf="pokemon.onEdition; else editDelete" (click)="pokemonCancel(i)">
+              <button type="button"
+                      class="btn btn-warning btn-sm"
+                      *ngIf="pokemon.onEdition; else editDelete"
+                      (click)="pokemonCancel(i)">
                 <i class="fa-regular fa-rectangle-xmark"></i> Cancelar
               </button>
               <ng-template #editDelete>

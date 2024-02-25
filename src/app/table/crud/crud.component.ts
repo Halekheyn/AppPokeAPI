@@ -41,11 +41,11 @@ export class CrudComponent implements OnInit {
 
   public pokemonDetail(index: number){
     console.log('pokemonDetail', index);
-
   }
 
   public pokemonEdit(index: number){
     console.log('pokemonEdit', index);
+    this.pokemonData[index].onEdition = true;
 
   }
 

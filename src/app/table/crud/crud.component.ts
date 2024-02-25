@@ -69,4 +69,10 @@ export class CrudComponent implements OnInit {
     this.pageOffset = (this.pageLimit * (this.pageCurrent - 1));
     this.pokemonList(this.pageLimit, this.pageOffset);
 	}
+
+  updateList(itemsLimit: string){
+    this.pageCurrent = 1;
+    this.pageLimit = parseInt(itemsLimit);
+    this.pokemonPagination()
+  }
 }

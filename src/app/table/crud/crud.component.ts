@@ -52,7 +52,8 @@ export class CrudComponent implements OnInit {
 
   public pokemonDelete(index: number){
     console.log('pokemonDelete', index);
-
+    this.pokemonDataEdit.splice(index,1);
+    this.pokemonData.splice(index,1);
   }
 
   public pokemonCreate(index: number){

@@ -120,14 +120,29 @@ export class CrudComponent implements OnInit {
   }
 
   public pokemonDelete(id: number){
-    /*console.log('pokemonDelete', index);
-    this.pokemonDataEdit.splice(index,1);
-    this.pokemonData.splice(index,1);*/
+
+    const pokemonDataStorage = localStorage.getItem('pokemonData');
+
+    if(pokemonDataStorage){
+
+      const pokemonOldStorage: PokemonInfoInterface[] = JSON.parse(pokemonDataStorage);
+      const pokemonNewStorage = pokemonOldStorage.filter(pokemon => pokemon.id !== id);
+      console.log('ingreso', pokemonNewStorage);
+      if (pokemonNewStorage) {
+        this._crudService.pokemonData = pokemonNewStorage;
+        localStorage.setItem('pokemonData', JSON.stringify(pokemonNewStorage));
+
+        this._crudService.pokemonData = this._crudService.pokemonData.filter(pokemon => pokemon!.id !== id);
+
+        if (this.pageCurrent > 1 && this.pageOffset >= this._crudService.pokemonData.length) {
+          this.pageCurrent--;
+        }
+
+        this.pokemonPagination();
+      }
+    }
+    console.table(this.pokemonDataEdit);
   }
-
-
-
-
 
   pokemonPagination() {
 

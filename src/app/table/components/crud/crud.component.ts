@@ -37,10 +37,10 @@ export class CrudComponent implements OnInit {
     this.pokemonPagination()
   }
 
-  public pokemonDetail(url: string, content: TemplateRef<any>){
-    console.log('pokemonDetail', url);
+  public pokemonDetail(id: number, content: TemplateRef<any>){
+    console.log('pokemonDetail', id);
 
-    this._crudService.getPokemonInfo(url)
+    /*this._crudService.getPokemonInfo(url)
         .subscribe( pokemonInfo => {
           this.pokemonInfo = pokemonInfo;
           this.test =  pokemonInfo?.effect_entries.find(entry => entry.language.name === 'en')?.effect;
@@ -53,7 +53,7 @@ export class CrudComponent implements OnInit {
                       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
                       },
               );
-        })
+        })*/
 
   }
 
@@ -68,27 +68,27 @@ export class CrudComponent implements OnInit {
 		}
 	}
 
-  public pokemonEdit(index: number){
+  public pokemonEdit(id: number){
     /*console.log('pokemonEdit', index);
     this.pokemonData[index].onEdition = true;
     this.pokemonDataEdit[index] = { ...this.pokemonData[index] }
     console.table(this.pokemonDataEdit);*/
   }
 
-  public pokemonDelete(index: number){
-    console.log('pokemonDelete', index);
+  public pokemonDelete(id: number){
+    /*onsole.log('pokemonDelete', index);
     this.pokemonDataEdit.splice(index,1);
-    this.pokemonData.splice(index,1);
+    this.pokemonData.splice(index,1);*/
   }
 
-  public pokemonCreate(index: number){
+  public pokemonCreate(id: number){
     /*console.log('pokemonCreate', index);
     this.pokemonData[index].onEdition = false;
     this.pokemonDataEdit[index] = null;
     console.table(this.pokemonDataEdit);*/
   }
 
-  public pokemonCancel(index: number){
+  public pokemonCancel(id: number){
     /*console.log('pokemonCancel', index);
     this.pokemonData[index] = { ...this.pokemonDataEdit[index]! };
     this.pokemonData[index].onEdition = false;

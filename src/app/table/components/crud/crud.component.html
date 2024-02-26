@@ -45,46 +45,44 @@
               <input *ngIf="pokemon!.onEdition; else notEditWeight" [(ngModel)]="pokemon!.weight">
               <ng-template #notEditWeight>{{ pokemon!.weight }}</ng-template>
             </td>
-
-
-            <!--<td>
+            <td class="text-center align-middle">
               <button type="button"
                       class="btn btn-info btn-sm"
-                      [disabled]="pokemon.onEdition"
-                      (click)="pokemonDetail(pokemon.url, content)">
+                      [disabled]="pokemon!.onEdition"
+                      (click)="pokemonDetail(pokemon!.id, content)">
                 <i class="fa-regular fa-eye"></i> Ver +
               </button>
             </td>
-            <td>
+            <td class="text-center align-middle">
               <button type="button"
                       class="btn btn-success btn-sm"
-                      *ngIf="pokemon.onEdition; else editButton"
-                      (click)="pokemonCreate(i)">
+                      *ngIf="pokemon!.onEdition; else editButton"
+                      (click)="pokemonCreate(pokemon!.id)">
                 <i class="fa-regular fa-floppy-disk"></i> Guardar
               </button>
               <ng-template #editButton>
                 <button type="button"
                         class="btn btn-primary btn-sm"
-                        (click)="pokemonEdit(i)">
+                        (click)="pokemonEdit(pokemon!.id)">
                   <i class="fa-regular fa-pen-to-square"></i> Editar
                 </button>
               </ng-template>
             </td>
-            <td>
+            <td class="text-center align-middle">
               <button type="button"
                       class="btn btn-warning btn-sm"
-                      *ngIf="pokemon.onEdition; else editDelete"
-                      (click)="pokemonCancel(i)">
+                      *ngIf="pokemon!.onEdition; else editDelete"
+                      (click)="pokemonCancel(pokemon!.id)">
                 <i class="fa-regular fa-rectangle-xmark"></i> Cancelar
               </button>
               <ng-template #editDelete>
                 <button type="button"
                         class="btn btn-danger btn-sm"
-                        (click)="pokemonDelete(i)">
+                        (click)="pokemonDelete(pokemon!.id)">
                   <i class="fa-regular fa-trash-can"></i> Eliminar
                 </button>
               </ng-template>
-            </td>-->
+            </td>
           </tr>
         </tbody>
       </table>

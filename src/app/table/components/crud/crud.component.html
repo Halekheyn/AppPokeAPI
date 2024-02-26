@@ -21,7 +21,14 @@
         <thead >
           <tr>
             <th scope="col" class="bg-primary text-white">Id</th>
-            <th scope="col" class="bg-primary text-white">Nombre</th>
+            <th scope="col" class="bg-primary text-white">
+              <input *ngIf="searchName; else notSearchName"
+                     #txtSearch
+                     (keyup)="pokemonSearch(txtSearch.value)">
+              <ng-template #notSearchName>Nombre </ng-template>
+              <i [ngClass]="{'fa-magnifying-glass': !searchName, 'fa-xmark': searchName}"
+                 class="fa-solid  ms-2" (click)="searchNameStatus()"></i>
+            </th>
             <th scope="col" class="bg-primary text-white">Imagen</th>
             <th scope="col" class="bg-primary text-white">Altura</th>
             <th scope="col" class="bg-primary text-white">Peso</th>

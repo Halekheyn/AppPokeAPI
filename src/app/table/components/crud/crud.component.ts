@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef, QueryList, ViewChildren  } from '@angular/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgModel } from '@angular/forms';
+import { Subject, Subscription, debounceTime } from 'rxjs';
 
 import { CrudService } from './crud.service';
 
@@ -16,7 +17,7 @@ import { PokemonInfoInterface } from '../../interfaces/pokemon-info.interface';
 export class CrudComponent implements OnInit {
 
   // Data Pokémon
-  public pokemonData: (PokemonInfoInterface | null)[] = [];
+  public pokemonData: ( PokemonInfoInterface | null )[] = [];
   public pokemonDataEdit : ( PokemonInfoInterface | null )[] = [];
   public pokemonInfo: PokemonInfoInterface | null = null;
 
@@ -39,11 +40,28 @@ export class CrudComponent implements OnInit {
   @ViewChildren('weightField') weightFields?: QueryList<NgModel>;
   @ViewChildren('weightField') abilitiesFields?: QueryList<NgModel>;
 
+  // Buscar
+  public searchName: boolean = false;
+  public filterName: string = '';
+  private debouncerSearch: Subject<string> = new Subject<string>();
+  private debouncerSearchSubscription?: Subscription;
+  public pokemonsFilters: ( PokemonInfoInterface | null )[]  = [];
+
   constructor(private _crudService:CrudService,
               private ngbModal: NgbModal ){}
 
   ngOnInit(): void {
-    this.pokemonPagination()
+    this.pokemonPagination();
+
+    this.debouncerSearchSubscription = this.debouncerSearch
+      .pipe(
+        debounceTime(1500)
+      )
+      .subscribe( filterName => {
+        this.filterName = filterName;
+        this.pageCurrent = 1;
+        this.pokemonPagination();
+      });
   }
 
   public pokemonEdit(id: number){
@@ -123,14 +141,30 @@ export class CrudComponent implements OnInit {
 
   pokemonPagination() {
 
+    console.log('pokemonPagination', this.filterName);
+
     console.log(this.pageCurrent);
     this.pageOffset = (this.pageLimit * (this.pageCurrent - 1));
 
-    const data = this._crudService.pokemonData;
-    if(data !== null){
-      const endIndex = this.pageOffset + this.pageLimit;
-      this.pokemonData = data.slice(this.pageOffset, endIndex);
-      this.pageTotal = this._crudService.pokemonData.length;
+    if(!this.filterName){
+
+      const data = this._crudService.pokemonData;
+      if(data !== null){
+        const endIndex = this.pageOffset + this.pageLimit;
+        this.pokemonData = data.slice(this.pageOffset, endIndex);
+        this.pageTotal = this._crudService.pokemonData.length;
+      }
+    }else{
+        console.log('ingreso');
+
+        let filters = this._crudService.pokemonData.filter(pokemon => pokemon!.name.includes(this.filterName));
+        console.log('filters', filters)
+
+        if(filters !== null){
+          const endIndex = this.pageOffset + this.pageLimit;
+          this.pokemonData = filters.slice(this.pageOffset, endIndex);
+          this.pageTotal = filters.length;
+      }
     }
 	}
 
@@ -262,5 +296,16 @@ export class CrudComponent implements OnInit {
 
   cancelarRegistro(index: number){
     this.pokemonRegister.splice(index, 1);
+  }
+
+  searchNameStatus(){
+    this.searchName = !this.searchName;
+    this.filterName = '';
+    this.pageCurrent = 1;
+    this.pokemonPagination();
+  }
+
+  pokemonSearch(filterName: string){
+    this.debouncerSearch.next(filterName);
   }
 }

@@ -1,27 +1,73 @@
-# AppPokeAPI
+# Administración de Pokémon con Angular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.12.
+Este proyecto es una aplicación de administración de Pokémon desarrollada con Angular 16, que permite realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en una interfaz de usuario interactiva que consume datos de la API de PokeAPI.
 
-## Development server
+## Características
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Grilla paginada para visualizar Pokémon con opciones para elegir la cantidad de registros por página.
+- Funcionalidades CRUD completas: añadir nuevos Pokémon, editar y eliminar Pokémon existentes, y ver detalles de cada uno en un modal.
+- Filtrado de Pokémon por nombre y otros atributos relevantes.
+- Interfaz de usuario intuitiva y fácil de usar.
 
-## Code scaffolding
+## Tecnologías Utilizadas
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Angular 16
+- PokeAPI
 
-## Build
+## Instalación y Ejecución
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Para ejecutar este proyecto en tu entorno local, sigue estos pasos:
 
-## Running unit tests
+1. Clona el repositorio a tu máquina local:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+2. Navega al directorio del proyecto:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## Further help
+3. Instala las dependencias del proyecto:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+4. Ejecuta el servidor de desarrollo de Angular:
+
+
+5. Abre tu navegador y visita `http://localhost:4200` para ver la aplicación en funcionamiento.
+
+## Demostración en Vivo
+
+Puedes acceder a una demostración en vivo de esta aplicación de administración de Pokémon a través de GitHub Pages en el siguiente enlace:
+
+[Ver Demostración en Vivo](https://halekheyn.github.io/AppPokeAPI/)
+
+Esta versión desplegada ofrece una vista previa completa de las funcionalidades del proyecto, permitiendo interactuar con las operaciones CRUD, la paginación, y el filtrado de datos en una interfaz de usuario intuitiva y accesible desde cualquier navegador.
+
+
+## Funcionalidades Detalladas
+
+### Grilla Paginada de Pokémon
+- La grilla muestra información esencial de los Pokémon, como nombre, imagen y habilidades.
+- Los usuarios pueden seleccionar la cantidad de Pokémon a mostrar por página.
+
+### Edición y Eliminación
+- Los botones de acción en cada fila permiten al usuario editar o eliminar registros directamente en la grilla.
+- Al editar, los botones cambian a "Guardar" y "Cancelar" para confirmar o revertir cambios.
+
+### Añadir Nuevo Pokémon
+- Un botón "Añadir" permite ingresar nuevos Pokémon a la lista, habilitando un formulario editable al inicio de la grilla.
+
+### Filtrado de Datos
+- Los usuarios pueden filtrar Pokémon por nombre usando un campo de búsqueda en el encabezados de la grilla.
+
+## Contribuciones
+
+Si deseas contribuir a este proyecto, por favor crea un fork y envía un pull request con tus mejoras.
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+
+---
+
+Desarrollado con ❤ por [Halekheyn]
+
+
+

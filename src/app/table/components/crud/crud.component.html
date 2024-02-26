@@ -111,8 +111,29 @@
 		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
 	</div>
 	<div class="modal-body">
-    {{ test }}
-	</div>
+    <div class="row">
+
+      <!-- Imagen -->
+      <div class="col-md-6 d-flex justify-content-center align-items-center">
+        <img [src]="pokemonInfo?.sprites?.other?.dream_world?.front_default"
+             alt="{{ pokemonInfo?.name }}" class="img-fluid">
+      </div>
+
+      <!-- Información -->
+      <div class="col-md-6">
+        <p><strong>ID:</strong> {{ pokemonInfo?.id }}</p>
+        <p><strong>Nombre:</strong> {{ pokemonInfo?.name }}</p>
+        <!-- Lista de habilidades -->
+        <p *ngFor="let ability of pokemonInfo?.abilities; let i = index">
+          <strong>Habilidad {{ i + 1 }}:</strong> {{ ability.ability.name }}
+        </p>
+        <p><strong>Altura:</strong> {{ pokemonInfo?.height }}</p>
+        <p><strong>Peso:</strong> {{ pokemonInfo?.weight }}</p>
+        <p><strong>Experiencia básica:</strong> {{ pokemonInfo?.base_experience }}</p>
+      </div>
+
+    </div>
+  </div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('SCross click')">Cerrar</button>
 	</div>

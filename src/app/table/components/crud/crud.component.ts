@@ -7,6 +7,7 @@ import { PokemonData } from '../../interfaces/pokemon-table.interface';
 import { CrudService } from './crud.service';
 import { PokemonInfo } from '../../interfaces/pokemo-ability.interface';
 import { PokemonInfoInterface } from '../../interfaces/pokemon-info.interface';
+import { filter } from 'rxjs';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class CrudComponent implements OnInit {
   // Data Pokémon
   public pokemonData: (PokemonInfoInterface | null)[] = [];
   public pokemonDataEdit : ( PokemonInfoInterface | null )[] = [];
-  public pokemonInfo: PokemonInfo | null = null;
+  public pokemonInfo: PokemonInfoInterface | null = null;
   public test?: string = '';
 
   // Paginación
@@ -37,37 +38,6 @@ export class CrudComponent implements OnInit {
   ngOnInit(): void {
     this.pokemonPagination()
   }
-
-  public pokemonDetail(id: number, content: TemplateRef<any>){
-    console.log('pokemonDetail', id);
-
-    /*this._crudService.getPokemonInfo(url)
-        .subscribe( pokemonInfo => {
-          this.pokemonInfo = pokemonInfo;
-          this.test =  pokemonInfo?.effect_entries.find(entry => entry.language.name === 'en')?.effect;
-          this.ngbModal.open(content, { ariaLabelledBy: 'modal-basic-title' })
-                 .result.then(
-                    (result) => {
-                        this.closeResult = `Closed with: ${result}`;
-                      },
-                    (reason) => {
-                      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-                      },
-              );
-        })*/
-
-  }
-
-  private getDismissReason(reason: any): string {
-		switch (reason) {
-			case ModalDismissReasons.ESC:
-				return 'by pressing ESC';
-			case ModalDismissReasons.BACKDROP_CLICK:
-				return 'by clicking on a backdrop';
-			default:
-				return `with: ${reason}`;
-		}
-	}
 
   public pokemonEdit(id: number){
 
@@ -162,4 +132,30 @@ export class CrudComponent implements OnInit {
     this.pageLimit = parseInt(itemsLimit);
     this.pokemonPagination();
   }
+
+  public pokemonDetail(id: number, content: TemplateRef<any>){
+    console.log('pokemonDetail', id);
+
+    this.pokemonInfo = this.pokemonData.filter(pokemon => pokemon!.id === id)[0];
+    this.ngbModal.open(content, { ariaLabelledBy: 'modal-basic-title' })
+            .result.then(
+              (result) => {
+                  this.closeResult = `Closed with: ${result}`;
+                },
+              (reason) => {
+                this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+                },
+        );
+  }
+
+  private getDismissReason(reason: any): string {
+		switch (reason) {
+			case ModalDismissReasons.ESC:
+				return 'by pressing ESC';
+			case ModalDismissReasons.BACKDROP_CLICK:
+				return 'by clicking on a backdrop';
+			default:
+				return `with: ${reason}`;
+		}
+	}
 }

@@ -4,6 +4,13 @@
     <div class="col col-md-6 pt-4 pb-2">
         <limit-box (itemsList)="updateList($event)"></limit-box>
     </div>
+    <div class="col col-md-6 pt-4 pb-2 d-flex">
+      <!-- Botón para añadir nuevas filas -->
+      <button type="button"
+              class="ms-auto btn btn-secondary btn-sm"
+              (click)="agregarFila()">Añadir Fila
+      </button>
+    </div>
   </div>
 
   <div class="row pt-2">
@@ -24,6 +31,57 @@
           </tr>
         </thead>
         <tbody class="table-striped">
+          <tr *ngFor="let register of pokemonRegister; let i = index">
+            <td>{{ register.id }}</td>
+            <td>
+              <input type="text" name="name{{i}}" #nameField="ngModel" [(ngModel)]="register.name" size="10" required />
+              <div *ngIf="nameField.touched && nameField.invalid">
+                <small class="text-danger">El nombre es requerido.</small>
+              </div>
+            </td>
+            <td>
+              <input type="text" name="image{{i}}" #imageField="ngModel" [(ngModel)]="register.urlImage" size="10" placeholder="Digitar URL de la imagen" required />
+              <div *ngIf="imageField.touched && imageField.invalid">
+                <small class="text-danger">La URL es requerida.</small>
+              </div>
+            </td>
+            <td>
+              <input type="number" name="height{{i}}" #heightField="ngModel" [(ngModel)]="register.height" size="10" required/>
+              <div *ngIf="heightField.touched && heightField.invalid">
+                <small class="text-danger">La altura es requerido.</small>
+              </div>
+            </td>
+            <td>
+              <input type="number" name="weight{{i}}" #weightField="ngModel" [(ngModel)]="register.weight" size="10" required/>
+              <div *ngIf="weightField.touched && weightField.invalid">
+                <small class="text-danger">El peso es requerido.</small>
+              </div>
+            </td>
+            <td><tag-input name="abilities{{i}}" #abilitiesField="ngModel"
+                           [(ngModel)]="register.abilities"
+                           [placeholder]="'Añade una habilidad...'"
+                           [secondaryPlaceholder]="'Ingresar habilidad(es)'"
+                           size="10" required>
+                </tag-input>
+                <div *ngIf="abilitiesField.touched && !register.abilities.length">
+                  <small class="text-danger">Se requiere al menos una habilidad.</small>
+                </div>
+            </td>
+            <td>
+              <button type="button"
+                      class="btn btn-success btn-sm"
+                      (click)="guardarRegistro(i)">
+                <i class="fa-regular fa-floppy-disk"></i> Guardar
+              </button>
+            </td>
+            <td>
+              <button type="button"
+                      class="btn btn-warning btn-sm"
+                      (click)="cancelarRegistro(i)">
+                <i class="fa-regular fa-rectangle-xmark"></i> Cancelar
+              </button>
+            </td>
+          </tr>
           <tr *ngFor="let pokemon of pokemonData; let i = index">
             <td class="align-middle">
               {{ pokemon!.id }}
@@ -138,3 +196,4 @@
 		<button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('SCross click')">Cerrar</button>
 	</div>
 </ng-template>
+<ng-template #standardTpl> I'm a standard toast </ng-template>

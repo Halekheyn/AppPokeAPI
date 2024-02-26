@@ -29,7 +29,7 @@
               <button type="button"
                       class="btn btn-info btn-sm"
                       [disabled]="pokemon.onEdition"
-                      (click)="pokemonDetail(i)">
+                      (click)="pokemonDetail(pokemon.url, content)">
                 <i class="fa-regular fa-eye"></i> Ver +
               </button>
             </td>
@@ -84,3 +84,16 @@
     </div>
   </div>
 </div>
+
+<ng-template #content let-modal>
+	<div class="modal-header bg-primary">
+		<h5 class="modal-title" id="modal-basic-title">Información</h5>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+    {{ test }}
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('SCross click')">Cerrar</button>
+	</div>
+</ng-template>

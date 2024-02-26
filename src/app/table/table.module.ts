@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableRoutingModule } from './table-routing.module';
 
-import { CrudComponent } from './crud/crud.component';
+import { CrudComponent } from './components/crud/crud.component';
 import { SharedModule } from '../shared/shared.module';
 
 

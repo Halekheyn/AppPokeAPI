@@ -13,7 +13,11 @@
       <table class="table table-striped table-bordered ">
         <thead >
           <tr>
+            <th scope="col" class="bg-primary text-white">Id</th>
             <th scope="col" class="bg-primary text-white">Nombre</th>
+            <th scope="col" class="bg-primary text-white">Imagen</th>
+            <th scope="col" class="bg-primary text-white">Altura</th>
+            <th scope="col" class="bg-primary text-white">Peso</th>
             <th scope="col" class="bg-primary text-white">Detalle</th>
             <th scope="col" class="bg-primary text-white">Editar</th>
             <th scope="col" class="bg-primary text-white">Eliminar</th>
@@ -21,11 +25,29 @@
         </thead>
         <tbody class="table-striped">
           <tr *ngFor="let pokemon of pokemonData; let i = index">
-            <td>
-              <input *ngIf="pokemon.onEdition; else notEdit1" [(ngModel)]="pokemon.name">
-              <ng-template #notEdit1>{{ pokemon.name }}</ng-template>
+            <td class="align-middle">
+              {{ pokemon!.id }}
             </td>
-            <td>
+            <td class="align-middle">
+              <input *ngIf="pokemon!.onEdition; else notEditName" [(ngModel)]="pokemon!.name">
+              <ng-template #notEditName>{{ pokemon!.name }}</ng-template>
+            </td>
+            <td class="text-center align-middle">
+              <img [src]="pokemon!.sprites.other!.dream_world.front_default"
+                   [alt]="pokemon!.name"
+                   class="img-thumbnail">
+            </td>
+            <td class="text-center align-middle">
+              <input *ngIf="pokemon!.onEdition; else notEditHeight" [(ngModel)]="pokemon!.height">
+              <ng-template #notEditHeight>{{ pokemon!.height }}</ng-template>
+            </td>
+            <td class="text-center align-middle">
+              <input *ngIf="pokemon!.onEdition; else notEditWeight" [(ngModel)]="pokemon!.weight">
+              <ng-template #notEditWeight>{{ pokemon!.weight }}</ng-template>
+            </td>
+
+
+            <!--<td>
               <button type="button"
                       class="btn btn-info btn-sm"
                       [disabled]="pokemon.onEdition"
@@ -62,7 +84,7 @@
                   <i class="fa-regular fa-trash-can"></i> Eliminar
                 </button>
               </ng-template>
-            </td>
+            </td>-->
           </tr>
         </tbody>
       </table>

@@ -9,6 +9,7 @@ export interface PokemonInfoInterface {
   weight:                   number;
   abilities:                Ability[];
   sprites:                  Sprites;
+  onEdition:                boolean;
 }
 
 export interface Ability {

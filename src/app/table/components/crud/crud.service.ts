@@ -15,7 +15,7 @@ export class CrudService{
 
   private url_api: string = "https://pokeapi.co/api/v2"
 
-  public pokemonData: (PokemonDataInterface | null)[] = [];
+  public pokemonData: (PokemonInfoInterface | null)[] = [];
 
   constructor(private httpClient: HttpClient){
     this.pokemonDataInit();
@@ -23,7 +23,12 @@ export class CrudService{
 
   private pokemonDataInit(){
 
-    if( localStorage.getItem('pokemonData')) return;
+    const pokemonList = localStorage.getItem('pokemonData');
+
+    if( pokemonList){
+      this.pokemonData = JSON.parse(pokemonList);
+      return;
+    }
 
     let getPokemonUrls = [];
     for(let i = 1; i <= 151; i++){
@@ -41,18 +46,18 @@ export class CrudService{
     forkJoin(requests).subscribe(responses => {
       console.log('pokemonDataInit', responses);
       localStorage.setItem('pokemonData', JSON.stringify( responses ));
+      this.pokemonData = responses;
     })
   }
 
-
   //this.pokemonDataStorage = JSON.parse( localStorage.getItem('pokemonDataStorage')! )
 
-  getPokemonList( limit:number, offset:number): Observable<PokemonTable | null>{
+  /*getPokemonList( limit:number, offset:number): Observable<PokemonTable | null>{
 
     const url: string = `${ this.url_api }/?limit=${ limit }&offset=${ offset }`;
 
     return this.getPokemonRequest(url) as Observable<PokemonTable | null>;
-  }
+  }*/
 
   getPokemonInfo( url: string ): Observable<PokemonInfo | null>{
 
@@ -95,6 +100,7 @@ export class CrudService{
               },
             },
           },
+          onEdition: false
         };
 
     return extractedData;

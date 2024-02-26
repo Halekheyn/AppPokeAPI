@@ -5,6 +5,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PokemonData } from '../../interfaces/pokemon-table.interface';
 import { CrudService } from './crud.service';
 import { PokemonInfo } from '../../interfaces/pokemo-ability.interface';
+import { PokemonInfoInterface } from '../../interfaces/pokemon-info.interface';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { PokemonInfo } from '../../interfaces/pokemo-ability.interface';
 export class CrudComponent implements OnInit {
 
   // Data Pokémon
-  public pokemonData!: PokemonData[];
+  public pokemonData: (PokemonInfoInterface | null)[] = [];
   public pokemonDataEdit : ( PokemonData | null )[] = [];
   public pokemonInfo: PokemonInfo | null = null;
   public test?: string = '';
@@ -33,21 +34,7 @@ export class CrudComponent implements OnInit {
               private ngbModal: NgbModal ){}
 
   ngOnInit(): void {
-
-    this.pokemonList(this.pageLimit, this.pageOffset);
-  }
-
-  public pokemonList( limit:number, offset:number ){
-    this._crudService.getPokemonList(limit, offset)
-        .subscribe( pokemons => {
-
-          if(pokemons?.results){
-            this.pokemonData = pokemons.results.map(pokemon => ({ ...pokemon, onEdition: false }))
-            this.pageTotal = pokemons.count;
-          }else{
-            this.pokemonData = [];
-          }
-        })
+    this.pokemonPagination()
   }
 
   public pokemonDetail(url: string, content: TemplateRef<any>){
@@ -68,7 +55,6 @@ export class CrudComponent implements OnInit {
               );
         })
 
-
   }
 
   private getDismissReason(reason: any): string {
@@ -83,10 +69,10 @@ export class CrudComponent implements OnInit {
 	}
 
   public pokemonEdit(index: number){
-    console.log('pokemonEdit', index);
+    /*console.log('pokemonEdit', index);
     this.pokemonData[index].onEdition = true;
     this.pokemonDataEdit[index] = { ...this.pokemonData[index] }
-    console.table(this.pokemonDataEdit);
+    console.table(this.pokemonDataEdit);*/
   }
 
   public pokemonDelete(index: number){
@@ -96,30 +82,36 @@ export class CrudComponent implements OnInit {
   }
 
   public pokemonCreate(index: number){
-    console.log('pokemonCreate', index);
+    /*console.log('pokemonCreate', index);
     this.pokemonData[index].onEdition = false;
     this.pokemonDataEdit[index] = null;
-    console.table(this.pokemonDataEdit);
+    console.table(this.pokemonDataEdit);*/
   }
 
   public pokemonCancel(index: number){
-    console.log('pokemonCancel', index);
+    /*console.log('pokemonCancel', index);
     this.pokemonData[index] = { ...this.pokemonDataEdit[index]! };
     this.pokemonData[index].onEdition = false;
     this.pokemonDataEdit[index] = null;
-    console.table(this.pokemonDataEdit);
+    console.table(this.pokemonDataEdit);*/
   }
 
   pokemonPagination() {
-		console.log(this.pageCurrent);
+
+    console.log(this.pageCurrent);
     this.pageOffset = (this.pageLimit * (this.pageCurrent - 1));
-    this.pokemonList(this.pageLimit, this.pageOffset);
-    this.pokemonDataEdit = [];
+
+    const data = this._crudService.pokemonData;
+    if(data !== null){
+      const endIndex = this.pageOffset + this.pageLimit;
+      this.pokemonData = data.slice(this.pageOffset, endIndex);
+      this.pageTotal = this._crudService.pokemonData.length;
+    }
 	}
 
   updateList(itemsLimit: string){
-    this.pageCurrent = 1;
+    /*this.pageCurrent = 1;
     this.pageLimit = parseInt(itemsLimit);
-    this.pokemonPagination()
+    this.pokemonPagination()*/
   }
 }

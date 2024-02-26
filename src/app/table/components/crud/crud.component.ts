@@ -1,3 +1,4 @@
+import { PokemonDataInterface } from './../../interfaces/pokemon-data.interface';
 import { Component, OnInit, inject, TemplateRef } from '@angular/core';
 
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -96,18 +97,35 @@ export class CrudComponent implements OnInit {
     console.table(this.pokemonDataEdit);
   }
 
+  public pokemonUpdate(id: number){
+    console.log('pokemonUpdate', id);
+
+    let pokemonNewInfo = this.pokemonData.find(pokemon => pokemon!.id === id);
+    const pokemonDataStorage = localStorage.getItem('pokemonData');
+
+    if(pokemonNewInfo && pokemonDataStorage){
+      pokemonNewInfo.onEdition = false;
+
+      const pokemonStorage: PokemonInfoInterface[] = JSON.parse(pokemonDataStorage);
+      const pokemonOldInfo = pokemonStorage.find(pokemon => pokemon.id === id);
+
+      if (pokemonOldInfo) {
+        Object.assign(pokemonOldInfo, pokemonNewInfo);
+        localStorage.setItem('pokemonData', JSON.stringify(pokemonStorage));
+      }
+    }
+
+    this.pokemonDataEdit = this.pokemonDataEdit.filter(pokemon => pokemon!.id !== id);
+    console.table(this.pokemonDataEdit);
+  }
+
   public pokemonDelete(id: number){
-    /*onsole.log('pokemonDelete', index);
+    /*console.log('pokemonDelete', index);
     this.pokemonDataEdit.splice(index,1);
     this.pokemonData.splice(index,1);*/
   }
 
-  public pokemonCreate(id: number){
-    /*console.log('pokemonCreate', index);
-    this.pokemonData[index].onEdition = false;
-    this.pokemonDataEdit[index] = null;
-    console.table(this.pokemonDataEdit);*/
-  }
+
 
 
 

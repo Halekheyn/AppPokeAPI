@@ -57,7 +57,7 @@
               <button type="button"
                       class="btn btn-success btn-sm"
                       *ngIf="pokemon!.onEdition; else editButton"
-                      (click)="pokemonCreate(pokemon!.id)">
+                      (click)="pokemonUpdate(pokemon!.id)">
                 <i class="fa-regular fa-floppy-disk"></i> Guardar
               </button>
               <ng-template #editButton>

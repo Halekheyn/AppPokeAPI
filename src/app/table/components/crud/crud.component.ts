@@ -70,12 +70,28 @@ export class CrudComponent implements OnInit {
 
   public pokemonEdit(id: number){
 
+    console.log('pokemonEdit', id);
     const pokemonItem = this.pokemonData.find(pokemon => pokemon!.id === id);
 
     if (pokemonItem) {
-      pokemonItem.onEdition = true;
       this.pokemonDataEdit.push({ ...pokemonItem });
+      pokemonItem.onEdition = true;
     }
+
+    console.table(this.pokemonDataEdit);
+  }
+
+  public pokemonCancel(id: number){
+
+    console.log('pokemonCancel', id);
+    let pokemonReset = this.pokemonData.find(pokemon => pokemon!.id === id);
+    const pokemonOriginal = this.pokemonDataEdit.find(pokemon => pokemon!.id === id);
+
+    if (pokemonReset && pokemonOriginal) {
+      Object.assign(pokemonReset, pokemonOriginal);
+    }
+
+    this.pokemonDataEdit = this.pokemonDataEdit.filter(pokemon => pokemon!.id !== id);
 
     console.table(this.pokemonDataEdit);
   }
@@ -93,13 +109,7 @@ export class CrudComponent implements OnInit {
     console.table(this.pokemonDataEdit);*/
   }
 
-  public pokemonCancel(id: number){
-    /*console.log('pokemonCancel', index);
-    this.pokemonData[index] = { ...this.pokemonDataEdit[index]! };
-    this.pokemonData[index].onEdition = false;
-    this.pokemonDataEdit[index] = null;
-    console.table(this.pokemonDataEdit);*/
-  }
+
 
   pokemonPagination() {
 

@@ -17,7 +17,7 @@ export class CrudComponent implements OnInit {
 
   // Data Pokémon
   public pokemonData: (PokemonInfoInterface | null)[] = [];
-  public pokemonDataEdit : ( PokemonData | null )[] = [];
+  public pokemonDataEdit : ( PokemonInfoInterface | null )[] = [];
   public pokemonInfo: PokemonInfo | null = null;
   public test?: string = '';
 
@@ -69,10 +69,15 @@ export class CrudComponent implements OnInit {
 	}
 
   public pokemonEdit(id: number){
-    /*console.log('pokemonEdit', index);
-    this.pokemonData[index].onEdition = true;
-    this.pokemonDataEdit[index] = { ...this.pokemonData[index] }
-    console.table(this.pokemonDataEdit);*/
+
+    const pokemonItem = this.pokemonData.find(pokemon => pokemon!.id === id);
+
+    if (pokemonItem) {
+      pokemonItem.onEdition = true;
+      this.pokemonDataEdit.push({ ...pokemonItem });
+    }
+
+    console.table(this.pokemonDataEdit);
   }
 
   public pokemonDelete(id: number){

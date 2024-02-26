@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableRoutingModule } from './table-routing.module';
+import { TagInputModule } from 'ngx-chips';
 
 import { CrudComponent } from './components/crud/crud.component';
 import { SharedModule } from '../shared/shared.module';
@@ -17,7 +18,8 @@ import { SharedModule } from '../shared/shared.module';
     FormsModule,
     NgbPaginationModule,
     TableRoutingModule,
-    SharedModule
+    SharedModule,
+    TagInputModule
   ],
   exports:[
     CrudComponent

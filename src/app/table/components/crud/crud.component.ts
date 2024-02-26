@@ -110,8 +110,8 @@ export class CrudComponent implements OnInit {
 	}
 
   updateList(itemsLimit: string){
-    /*this.pageCurrent = 1;
+    this.pageCurrent = 1;
     this.pageLimit = parseInt(itemsLimit);
-    this.pokemonPagination()*/
+    this.pokemonPagination();
   }
 }

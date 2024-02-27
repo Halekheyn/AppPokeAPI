@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LimitBoxComponent } from './components/limit-box/limit-box.component';
+import { PaginationLimitSelectorComponent } from './components/pagination-limit-selector/pagination-limit-selector.component';
 
 
 @NgModule({
   declarations: [
-    LimitBoxComponent
+    PaginationLimitSelectorComponent
   ],
   imports: [
     CommonModule
   ],
   exports: [
-    LimitBoxComponent
+    PaginationLimitSelectorComponent
   ]
 })
 export class SharedModule { }

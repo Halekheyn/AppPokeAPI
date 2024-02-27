@@ -2,12 +2,15 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Subject, Subscription, debounceTime } from 'rxjs';
 
 @Component({
-  selector: 'limit-box',
-  templateUrl: './limit-box.component.html',
-  styleUrls: ['./limit-box.component.scss']
+  selector: 'pagination-limit-selector',
+  templateUrl: './pagination-limit-selector.component.html',
+  styleUrls: ['./pagination-limit-selector.component.scss']
 })
-export class LimitBoxComponent implements OnInit{
+export class PaginationLimitSelectorComponent implements OnInit{
 
+  /**
+   * Esperar a que el usuario termine de escribir antes de ejecutar la búsqueda
+   */
   private debouncer: Subject<string> = new Subject<string>();
   private debouncerSubscription?: Subscription;
 

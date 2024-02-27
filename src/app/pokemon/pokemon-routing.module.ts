@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CrudComponent } from './components/crud/crud.component';
+import { PokeApiManagerComponent } from './components/pokeApiManager/poke-api-manager.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: CrudComponent
+    component: PokeApiManagerComponent
   }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TableRoutingModule { }
+export class PokemonRoutingModule { }

@@ -3,18 +3,18 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgModel } from '@angular/forms';
 import { Subject, Subscription, debounceTime } from 'rxjs';
 
-import { CrudService } from './crud.service';
+import { PokeApiManagerService } from '../../services/poke-api-manager.service';
 
 import { PokemonTable } from '../../interfaces/pokemon-table.interface';
 import { PokemonInfoInterface } from '../../interfaces/pokemon-info.interface';
 
 
 @Component({
-  selector: 'table-crud',
-  templateUrl: './crud.component.html',
-  styleUrls: ['./crud.component.scss']
+  selector: 'poke-api-manager',
+  templateUrl: './poke-api-manager.component.html',
+  styleUrls: ['./poke-api-manager.component.scss']
 })
-export class CrudComponent implements OnInit {
+export class PokeApiManagerComponent implements OnInit {
 
   // Data Pokémon
   public pokemonData: ( PokemonInfoInterface | null )[] = [];
@@ -47,7 +47,7 @@ export class CrudComponent implements OnInit {
   private debouncerSearchSubscription?: Subscription;
   public pokemonsFilters: ( PokemonInfoInterface | null )[]  = [];
 
-  constructor(private _crudService:CrudService,
+  constructor(private _crudService:PokeApiManagerService,
               private ngbModal: NgbModal ){}
 
   ngOnInit(): void {

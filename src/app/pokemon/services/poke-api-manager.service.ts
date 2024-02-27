@@ -2,16 +2,16 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of, tap, forkJoin, filter, map } from "rxjs";
 
-import { PokemonTable } from "../../interfaces/pokemon-table.interface";
-import { PokemonInfo } from "../../interfaces/pokemo-ability.interface";
-import { PokemonDataInterface } from "../../interfaces/pokemon-data.interface";
-import { PokemonInfoInterface } from "../../interfaces/pokemon-info.interface";
+import { PokemonTable } from "../interfaces/pokemon-table.interface";
+import { PokemonInfo } from "../interfaces/pokemo-ability.interface";
+import { PokemonDataInterface } from "../interfaces/pokemon-data.interface";
+import { PokemonInfoInterface } from "../interfaces/pokemon-info.interface";
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class CrudService{
+export class PokeApiManagerService{
 
   private url_api: string = "https://pokeapi.co/api/v2"
 

@@ -1,17 +1,17 @@
 <div class="row g-3 align-items-center">
   <div class="col-auto">
-    <label for="iItems"
+    <label for="recordsPerPage"
           class="col-form-label">Registros por página
     </label>
   </div>
   <div class="col-sm-3">
   <input type="number"
         class="form-control"
-        id="iItems"
-        name="iItems"
+        id="recordsPerPage"
+        name="recordsPerPage"
         maxlength="3"
-        #iItems
-        (keyup)="showList(iItems.value)"
-        (change)="showList(iItems.value)">
+        #recordsPerPage
+        (keyup)="showList(recordsPerPage.value)"
+        (change)="showList(recordsPerPage.value)">
   </div>
 </div>

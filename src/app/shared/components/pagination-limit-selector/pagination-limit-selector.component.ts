@@ -1,41 +1,45 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject, Subscription, debounceTime } from 'rxjs';
+
 
 @Component({
   selector: 'pagination-limit-selector',
   templateUrl: './pagination-limit-selector.component.html',
   styleUrls: ['./pagination-limit-selector.component.scss']
 })
-export class PaginationLimitSelectorComponent implements OnInit{
+export class PaginationLimitSelectorComponent implements OnInit, OnDestroy{
 
-  /**
-   * Esperar a que el usuario termine de escribir antes de ejecutar la búsqueda
-   */
-  private debouncer: Subject<string> = new Subject<string>();
-  private debouncerSubscription?: Subscription;
+  private recordsPerPageDebouncer: Subject<string> = new Subject<string>();
+  private recordsPerPageDebouncerSubscription?: Subscription;
 
   @Output()
-  public itemsList: EventEmitter<string>= new EventEmitter()
+  public pageSize: EventEmitter<string>= new EventEmitter();
 
   ngOnInit(): void {
-    this.debouncerSubscription = this.debouncer
+
+    /**
+     * Esperar a que el usuario termine de escribir
+     * antes de enviar al componente padre
+     * el límite de registros a visualizar por paginación
+     */
+    this.recordsPerPageDebouncerSubscription = this.recordsPerPageDebouncer
     .pipe(
       debounceTime(1500)
     )
     .subscribe( value => {
-      console.log('debouncer value', value);
-      this.itemsList.emit(value)
+      this.pageSize.emit(value)
     })
   }
 
-  // Se llama cuando la instancia es destruida,
-  // cada vez que salgo de la página
+  /**
+   * Se implementa 'ngOnDestroy' para destruir la instancia
+   * cada vez que se salga de la página
+   */
   ngOnDestroy(): void {
-    this.debouncerSubscription?.unsubscribe()
+    this.recordsPerPageDebouncerSubscription?.unsubscribe();
   }
 
-  showList( items:string ){
-    console.log({items});
-    this.debouncer.next(items);
+  setPaginationLimit( items:string ){
+    this.recordsPerPageDebouncer.next(items);
   }
 }

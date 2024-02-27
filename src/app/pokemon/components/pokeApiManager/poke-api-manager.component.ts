@@ -4,9 +4,11 @@ import { NgModel } from '@angular/forms';
 import { Subject, Subscription, debounceTime } from 'rxjs';
 
 import { PokeApiManagerService } from '../../services/poke-api-manager.service';
+import { PokeApiPaginationService } from '../../services/poke-api-pagination.service';
 
 import { PokemonDataCreateInterface } from '../../interfaces/pokemon-data-create.interface';
 import { PokemonDataForTableInterface } from '../../interfaces/pokemon-data-for-table.interface';
+import { PokemonDataPaginationInterface } from '../../interfaces/pokemon-data-pagination.interface';
 
 
 @Component({
@@ -17,15 +19,17 @@ import { PokemonDataForTableInterface } from '../../interfaces/pokemon-data-for-
 export class PokeApiManagerComponent implements OnInit {
 
   // Data Pokémon
-  public pokemonData: ( PokemonDataForTableInterface | null )[] = [];
   public pokemonDataEdit : ( PokemonDataForTableInterface | null )[] = [];
   public pokemonInfo: PokemonDataForTableInterface | null = null;
 
   // Paginación
-  public pageCurrent: number = 1;
-	public pageLimit: number = 10;
-	public pageOffset: number = 0;
-	public pageTotal: number = 0;
+  public pokemonDataTable: PokemonDataPaginationInterface = {
+    pageData: [],
+    pageCurrent: 1,
+    pageSize: 10,
+    pageTotal: 0,
+    pageItemInit: 0
+  }
 
   //Modal
   public closeResult:string = '';
@@ -47,10 +51,12 @@ export class PokeApiManagerComponent implements OnInit {
   private debouncerSearchSubscription?: Subscription;
   public pokemonsFilters: ( PokemonDataForTableInterface | null )[]  = [];
 
-  constructor(private _crudService:PokeApiManagerService,
+  constructor(private _pokeApiManagerService:PokeApiManagerService,
+              private _pokeApiPaginationService: PokeApiPaginationService,
               private ngbModal: NgbModal ){}
 
   ngOnInit(): void {
+
     this.pokemonPagination();
 
     this.debouncerSearchSubscription = this.debouncerSearch
@@ -59,7 +65,7 @@ export class PokeApiManagerComponent implements OnInit {
       )
       .subscribe( filterName => {
         this.filterName = filterName;
-        this.pageCurrent = 1;
+        this.pokemonDataTable.pageCurrent = 1;
         this.pokemonPagination();
       });
   }
@@ -67,7 +73,7 @@ export class PokeApiManagerComponent implements OnInit {
   public pokemonEdit(id: number){
 
     console.log('pokemonEdit', id);
-    const pokemonItem = this.pokemonData.find(pokemon => pokemon!.id === id);
+    const pokemonItem = this.pokemonDataTable.pageData.find(pokemon => pokemon!.id === id);
 
     if (pokemonItem) {
       this.pokemonDataEdit.push({ ...pokemonItem });
@@ -80,7 +86,7 @@ export class PokeApiManagerComponent implements OnInit {
   public pokemonCancel(id: number){
 
     console.log('pokemonCancel', id);
-    let pokemonReset = this.pokemonData.find(pokemon => pokemon!.id === id);
+    let pokemonReset = this.pokemonDataTable.pageData.find(pokemon => pokemon!.id === id);
     const pokemonOriginal = this.pokemonDataEdit.find(pokemon => pokemon!.id === id);
 
     if (pokemonReset && pokemonOriginal) {
@@ -95,7 +101,7 @@ export class PokeApiManagerComponent implements OnInit {
   public pokemonUpdate(id: number){
     console.log('pokemonUpdate', id);
 
-    let pokemonNewInfo = this.pokemonData.find(pokemon => pokemon!.id === id);
+    let pokemonNewInfo = this.pokemonDataTable.pageData.find(pokemon => pokemon!.id === id);
     const pokemonDataStorage = localStorage.getItem('pokemonData');
 
     if(pokemonNewInfo && pokemonDataStorage){
@@ -124,13 +130,13 @@ export class PokeApiManagerComponent implements OnInit {
       const pokemonNewStorage = pokemonOldStorage.filter(pokemon => pokemon.id !== id);
       console.log('ingreso', pokemonNewStorage);
       if (pokemonNewStorage) {
-        this._crudService.pokemonData = pokemonNewStorage;
+        this._pokeApiManagerService.pokemonData = pokemonNewStorage;
         localStorage.setItem('pokemonData', JSON.stringify(pokemonNewStorage));
 
-        this._crudService.pokemonData = this._crudService.pokemonData.filter(pokemon => pokemon!.id !== id);
+        this._pokeApiManagerService.pokemonData = this._pokeApiManagerService.pokemonData.filter(pokemon => pokemon!.id !== id);
 
-        if (this.pageCurrent > 1 && this.pageOffset >= this._crudService.pokemonData.length) {
-          this.pageCurrent--;
+        if (this.pokemonDataTable.pageCurrent > 1 && this.pokemonDataTable.pageSize >= this.pokemonDataTable.pageTotal) {
+          this.pokemonDataTable.pageCurrent --;
         }
 
         this.pokemonPagination();
@@ -139,45 +145,16 @@ export class PokeApiManagerComponent implements OnInit {
     console.table(this.pokemonDataEdit);
   }
 
-  pokemonPagination() {
-
-    console.log('pokemonPagination', this.filterName);
-
-    console.log(this.pageCurrent);
-    this.pageOffset = (this.pageLimit * (this.pageCurrent - 1));
-
-    if(!this.filterName){
-
-      const data = this._crudService.pokemonData;
-      if(data !== null){
-        const endIndex = this.pageOffset + this.pageLimit;
-        this.pokemonData = data.slice(this.pageOffset, endIndex);
-        this.pageTotal = this._crudService.pokemonData.length;
-      }
-    }else{
-        console.log('ingreso');
-
-        let filters = this._crudService.pokemonData.filter(pokemon => pokemon!.name.includes(this.filterName));
-        console.log('filters', filters)
-
-        if(filters !== null){
-          const endIndex = this.pageOffset + this.pageLimit;
-          this.pokemonData = filters.slice(this.pageOffset, endIndex);
-          this.pageTotal = filters.length;
-      }
-    }
-	}
-
   updateList(itemsLimit: string){
-    this.pageCurrent = 1;
-    this.pageLimit = parseInt(itemsLimit);
+    this.pokemonDataTable.pageCurrent = 1;
+    this.pokemonDataTable.pageSize = parseInt(itemsLimit);
     this.pokemonPagination();
   }
 
   public pokemonDetail(id: number, content: TemplateRef<any>){
     console.log('pokemonDetail', id);
 
-    this.pokemonInfo = this.pokemonData.filter(pokemon => pokemon!.id === id)[0];
+    this.pokemonInfo = this.pokemonDataTable.pageData.filter(pokemon => pokemon!.id === id)[0];
     this.ngbModal.open(content, { ariaLabelledBy: 'modal-basic-title' })
             .result.then(
               (result) => {
@@ -263,7 +240,6 @@ export class PokeApiManagerComponent implements OnInit {
                             }
                           });
 
-      // Generated by https://quicktype.io
       const pokemonAdd : PokemonDataForTableInterface = {
         id: idNew,
         name: this.pokemonRegister[index].name,
@@ -283,7 +259,7 @@ export class PokeApiManagerComponent implements OnInit {
       };
 
       pokemonStorage.push(pokemonAdd);
-      this._crudService.pokemonData.push(pokemonAdd);
+      this._pokeApiManagerService.pokemonData.push(pokemonAdd);
 
       localStorage.setItem('pokemonData', JSON.stringify(pokemonStorage));
 
@@ -291,7 +267,7 @@ export class PokeApiManagerComponent implements OnInit {
 
       console.log('guardarRegistro', pokemonAdd);
 
-      this.pageCurrent = 1;
+      this.pokemonDataTable.pageCurrent = 1;
       this.pokemonPagination();
     }
   }
@@ -303,11 +279,14 @@ export class PokeApiManagerComponent implements OnInit {
   searchNameStatus(){
     this.searchName = !this.searchName;
     this.filterName = '';
-    this.pageCurrent = 1;
-    this.pokemonPagination();
+    this.pokemonDataTable.pageCurrent = 1;
   }
 
   pokemonSearch(filterName: string){
     this.debouncerSearch.next(filterName);
+  }
+
+  pokemonPagination(){
+    this.pokemonDataTable = this._pokeApiPaginationService.pokemonPagination(this.pokemonDataTable, this.filterName);
   }
 }

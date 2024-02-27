@@ -89,7 +89,7 @@
               </button>
             </td>
           </tr>
-          <tr *ngFor="let pokemon of pokemonData; let i = index">
+          <tr *ngFor="let pokemon of pokemonDataTable.pageData; let i = index">
             <td class="align-middle">
               {{ pokemon!.id }}
             </td>
@@ -156,9 +156,9 @@
       <!-- Paginación -->
       <div class="d-flex justify-content-center">
         <ngb-pagination
-          [collectionSize]="pageTotal"
-          [(page)]="pageCurrent"
-          [pageSize]="pageLimit"
+          [collectionSize]="pokemonDataTable.pageTotal"
+          [(page)]="pokemonDataTable.pageCurrent"
+          [pageSize]="pokemonDataTable.pageSize"
           [maxSize]="4"
           [rotate]="true"
           [boundaryLinks]="true"

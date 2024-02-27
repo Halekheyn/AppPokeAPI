@@ -283,6 +283,8 @@ export class CrudComponent implements OnInit {
       };
 
       pokemonStorage.push(pokemonAdd);
+      this._crudService.pokemonData.push(pokemonAdd);
+
       localStorage.setItem('pokemonData', JSON.stringify(pokemonStorage));
 
       this.pokemonRegister.splice(index, 1);

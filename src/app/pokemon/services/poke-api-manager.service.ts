@@ -2,10 +2,8 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of, tap, forkJoin, filter, map } from "rxjs";
 
-import { PokemonTable } from "../interfaces/pokemon-table.interface";
-import { PokemonInfo } from "../interfaces/pokemo-ability.interface";
-import { PokemonDataInterface } from "../interfaces/pokemon-data.interface";
-import { PokemonInfoInterface } from "../interfaces/pokemon-info.interface";
+import { PokemonDataFullInterface } from "../interfaces/pokemon-data-full.interface";
+import { PokemonDataForTableInterface } from "../interfaces/pokemon-data-for-table.interface";
 
 
 @Injectable({
@@ -15,7 +13,7 @@ export class PokeApiManagerService{
 
   private url_api: string = "https://pokeapi.co/api/v2"
 
-  public pokemonData: (PokemonInfoInterface | null)[] = [];
+  public pokemonData: (PokemonDataForTableInterface | null)[] = [];
 
   constructor(private httpClient: HttpClient){
     this.pokemonDataInit();
@@ -38,7 +36,7 @@ export class PokeApiManagerService{
     const requests = getPokemonUrls.map(url => {
                           return this.getPokemonRequest(url)
                                      .pipe(
-                                        filter((data): data is PokemonDataInterface => data !== null && (data as PokemonDataInterface).id !== undefined), // Asegura que data no es null y tiene propiedad id
+                                        filter((data): data is PokemonDataFullInterface => data !== null && (data as PokemonDataFullInterface).id !== undefined), // Asegura que data no es null y tiene propiedad id
                                         map(data => this.extractPokemonData(data))
                                      )
                      });
@@ -50,24 +48,10 @@ export class PokeApiManagerService{
     })
   }
 
-  //this.pokemonDataStorage = JSON.parse( localStorage.getItem('pokemonDataStorage')! )
-
-  /*getPokemonList( limit:number, offset:number): Observable<PokemonTable | null>{
-
-    const url: string = `${ this.url_api }/?limit=${ limit }&offset=${ offset }`;
-
-    return this.getPokemonRequest(url) as Observable<PokemonTable | null>;
-  }*/
-
-  getPokemonInfo( url: string ): Observable<PokemonInfo | null>{
-
-    return this.getPokemonRequest(url) as Observable<PokemonInfo | null>;
-  }
-
-  private getPokemonRequest( url:string ): Observable<PokemonTable | PokemonInfo | PokemonDataInterface | null> {
+  private getPokemonRequest( url:string ): Observable< PokemonDataFullInterface | null > {
     console.log('url', url);
 
-    return this.httpClient.get<PokemonTable | PokemonInfo>(url)
+    return this.httpClient.get< PokemonDataFullInterface >(url)
                .pipe(
                   tap( (data) => console.log('getPokemonRequest - success', data)),
                   catchError(error => {
@@ -77,8 +61,8 @@ export class PokeApiManagerService{
                )
   }
 
-  private extractPokemonData(originalData: PokemonDataInterface): PokemonInfoInterface {
-    const extractedData: PokemonInfoInterface = {
+  private extractPokemonData(originalData: PokemonDataFullInterface): PokemonDataForTableInterface {
+    const extractedData: PokemonDataForTableInterface = {
           id: originalData.id,
           name: originalData.name,
           base_experience: originalData.base_experience,

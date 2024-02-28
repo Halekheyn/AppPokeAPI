@@ -41,8 +41,44 @@
               </div>
             </th>
             <th scope="col" class="bg-primary text-white">Imagen</th>
-            <th scope="col" class="bg-primary text-white">Altura</th>
-            <th scope="col" class="bg-primary text-white">Peso</th>
+            <th scope="col" class="bg-primary text-white">
+              <!-- Altura -->
+              <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                  <search-box-thead
+                    *ngIf="pokemonSearchFlag.height; else notSearchHeight"
+                    [inputType]="'number'"
+                    (searchTerm)="pokemonSearch($event, 'height')">
+                  </search-box-thead>
+                </div>
+                <div class="col-sm-1">
+                  <ng-template #notSearchHeight>Altura </ng-template>
+                  <i [ngClass]="{'fa-magnifying-glass': !pokemonSearchFlag.height, 'fa-xmark': pokemonSearchFlag.height}"
+                     class="fa-solid  ms-2"
+                     (click)="showSearch('height')">
+                  </i>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="bg-primary text-white">
+              <!-- Peso -->
+              <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                  <search-box-thead
+                    *ngIf="pokemonSearchFlag.weight; else notSearchWeight"
+                    [inputType]="'number'"
+                    (searchTerm)="pokemonSearch($event, 'weight')">
+                  </search-box-thead>
+                </div>
+                <div class="col-sm-1">
+                  <ng-template #notSearchWeight>Altura </ng-template>
+                  <i [ngClass]="{'fa-magnifying-glass': !pokemonSearchFlag.weight, 'fa-xmark': pokemonSearchFlag.weight}"
+                     class="fa-solid  ms-2"
+                     (click)="showSearch('weight')">
+                  </i>
+                </div>
+              </div>
+            </th>
             <th scope="col" class="bg-primary text-white">Detalle</th>
             <th scope="col" class="bg-primary text-white">Editar</th>
             <th scope="col" class="bg-primary text-white">Eliminar</th>

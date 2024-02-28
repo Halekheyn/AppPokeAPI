@@ -38,15 +38,20 @@ export class PokeApiPaginationService{
 
       } else {
 
-          const matchingItems = data.filter(pokemon =>
-            Object.keys(searchTerms).every(key =>
-              pokemon![key as keyof PokemonSearchTermsInterface].toString().toLowerCase().includes((searchTerms![key as keyof PokemonSearchTermsInterface] as string).toLowerCase())
-            )
-          );
-          paginationData.pageTotal = matchingItems.length;
+        const matchingItems = data.filter(pokemon =>
+          Object.keys(searchTerms).every(key => {
+            const pokemonData = (pokemon![key as keyof PokemonSearchTermsInterface] as string).toString().toLowerCase();
+            const criteria = (searchTerms![key as keyof PokemonSearchTermsInterface] as string).toLowerCase();
+            return pokemonData.includes(criteria);
+          })
+        );
 
-          if(paginationData.pageTotal > 0 ){
-            paginationData.pageData = matchingItems.slice(paginationData.pageItemInit, pageItemEnd);
+        paginationData.pageTotal = matchingItems.length;
+
+        if(paginationData.pageTotal > 0 ){
+          paginationData.pageData = matchingItems.slice(paginationData.pageItemInit, pageItemEnd);
+        }else{
+          paginationData.pageData = [];
         }
       }
     }

@@ -1,10 +1,12 @@
 <input [type]="inputType"
-style="width: auto;"
-      class="form-control"
-      id="searchBoxThead"
-      name="searchBoxThead"
-      maxlength="3"
-      #searchBoxThead
-      (keyup)="setSearchTerm(searchBoxThead.value)"
-      (change)="setSearchTerm(searchBoxThead.value)">
+       [attr.maxlength]="inputType === 'text' ? inputMaxLength : null"
+       [attr.min]="inputType === 'number' ? 0 : null"
+       [attr.max]="inputType === 'number' ? inputMaxLength : null"
+       style="width: auto;"
+       class="form-control"
+       id="searchBoxThead"
+       name="searchBoxThead"
+       #searchBoxThead
+       (keyup)="setSearchTerm(searchBoxThead.value)"
+       (change)="setSearchTerm(searchBoxThead.value)">
 

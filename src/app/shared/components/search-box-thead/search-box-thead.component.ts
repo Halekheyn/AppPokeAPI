@@ -14,6 +14,9 @@ export class SearchBoxTheadComponent implements OnInit, OnDestroy{
   @Input()
   public inputType!: string;
 
+  @Input()
+  public inputMaxLength!: string;
+
   @Output()
   public searchTerm: EventEmitter<string>= new EventEmitter();
 
@@ -28,7 +31,16 @@ export class SearchBoxTheadComponent implements OnInit, OnDestroy{
       debounceTime(1500)
     )
     .subscribe( value => {
-      this.searchTerm.emit(value)
+
+      if(this.inputType === 'text'){
+        this.searchTerm.emit(value);
+      } else if(this.inputType === 'number' && parseInt(value) <= parseInt(this.inputMaxLength)){
+        this.searchTerm.emit(value);
+      } else {
+        if(this.inputType === 'number'){
+          console.error('No se logra enviar la petición, porque no cumple las condiciones', value);
+        }
+      }
     })
   }
 

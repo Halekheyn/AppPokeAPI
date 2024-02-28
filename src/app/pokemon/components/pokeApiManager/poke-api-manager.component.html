@@ -28,6 +28,7 @@
                   <search-box-thead
                     *ngIf="pokemonSearchFlag.name; else notSearchName"
                     [inputType]="'text'"
+                    [inputMaxLength]="'20'"
                     (searchTerm)="pokemonSearch($event, 'name')">
                   </search-box-thead>
                 </div>
@@ -48,6 +49,7 @@
                   <search-box-thead
                     *ngIf="pokemonSearchFlag.height; else notSearchHeight"
                     [inputType]="'number'"
+                    [inputMaxLength]="'999'"
                     (searchTerm)="pokemonSearch($event, 'height')">
                   </search-box-thead>
                 </div>
@@ -67,6 +69,7 @@
                   <search-box-thead
                     *ngIf="pokemonSearchFlag.weight; else notSearchWeight"
                     [inputType]="'number'"
+                    [inputMaxLength]="'999'"
                     (searchTerm)="pokemonSearch($event, 'weight')">
                   </search-box-thead>
                 </div>

@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, QueryList, ViewChildren  } from '@angular/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgModel } from '@angular/forms';
-import { Subject, Subscription, debounceTime } from 'rxjs';
 
 import { PokeApiManagerService } from '../../services/poke-api-manager.service';
 import { PokeApiPaginationService } from '../../services/poke-api-pagination.service';
@@ -9,6 +8,7 @@ import { PokeApiPaginationService } from '../../services/poke-api-pagination.ser
 import { PokemonDataCreateInterface } from '../../interfaces/pokemon-data-create.interface';
 import { PokemonDataForTableInterface } from '../../interfaces/pokemon-data-for-table.interface';
 import { PokemonDataPaginationInterface } from '../../interfaces/pokemon-data-pagination.interface';
+import { PokemonSearchTermsInterface, pokemonSearchFlagInterface } from '../../interfaces/pokemon-search-terms.interface';
 
 
 @Component({
@@ -22,6 +22,16 @@ export class PokeApiManagerComponent implements OnInit {
   public pokemonDataEdit : ( PokemonDataForTableInterface | null )[] = [];
   public pokemonInfo: PokemonDataForTableInterface | null = null;
 
+  // Buscador - filtro
+  private pokemonSearchTerms: PokemonSearchTermsInterface = {};
+  public pokemonSearchFlag: pokemonSearchFlagInterface = {
+    name: false,
+    height: false,
+    weight: false
+  }
+  public pokemonsFilters: ( PokemonDataForTableInterface | null )[]  = [];
+
+
   // Paginación
   public pokemonDataTable: PokemonDataPaginationInterface = {
     pageData: [],
@@ -30,6 +40,7 @@ export class PokeApiManagerComponent implements OnInit {
     pageTotal: 0,
     pageItemInit: 0
   }
+
 
   //Modal
   public closeResult:string = '';
@@ -44,30 +55,13 @@ export class PokeApiManagerComponent implements OnInit {
   @ViewChildren('weightField') weightFields?: QueryList<NgModel>;
   @ViewChildren('weightField') abilitiesFields?: QueryList<NgModel>;
 
-  // Buscar
-  public searchName: boolean = false;
-  public filterName: string = '';
-  private debouncerSearch: Subject<string> = new Subject<string>();
-  private debouncerSearchSubscription?: Subscription;
-  public pokemonsFilters: ( PokemonDataForTableInterface | null )[]  = [];
 
   constructor(private _pokeApiManagerService:PokeApiManagerService,
               private _pokeApiPaginationService: PokeApiPaginationService,
               private ngbModal: NgbModal ){}
 
   ngOnInit(): void {
-
     this.pokemonPagination();
-
-    this.debouncerSearchSubscription = this.debouncerSearch
-      .pipe(
-        debounceTime(1500)
-      )
-      .subscribe( filterName => {
-        this.filterName = filterName;
-        this.pokemonDataTable.pageCurrent = 1;
-        this.pokemonPagination();
-      });
   }
 
   public pokemonEdit(id: number){
@@ -276,17 +270,36 @@ export class PokeApiManagerComponent implements OnInit {
     this.pokemonRegister.splice(index, 1);
   }
 
-  searchNameStatus(){
-    this.searchName = !this.searchName;
-    this.filterName = '';
+  /**
+   * Visualiza/Oculta, el 'input search' correspondiente a la cabecera
+   * de la columna que se ha indicado para la busqueda
+   */
+  showSearch(property: keyof pokemonSearchFlagInterface){
+    this.pokemonSearchFlag[property] = !this.pokemonSearchFlag[property];
+    if(this.pokemonSearchFlag[property]){
+      // Agrega la propiedad al objeto
+      this.pokemonSearchTerms[property];
+    }else{
+      // Eliminar la propiedad "edad"
+      delete this.pokemonSearchTerms[property];
+      this.pokemonPagination();
+    }
+  }
+
+  /**
+   * Recibe la propiedad y el parametro de búsqueda,
+   * para el filtro
+   */
+  pokemonSearch(searchTerm: string, property: keyof PokemonSearchTermsInterface){
+    this.pokemonSearchTerms[property] = searchTerm;
     this.pokemonDataTable.pageCurrent = 1;
+    this.pokemonPagination();
   }
 
-  pokemonSearch(filterName: string){
-    this.debouncerSearch.next(filterName);
-  }
-
+  /**
+   * Paginador
+   */
   pokemonPagination(){
-    this.pokemonDataTable = this._pokeApiPaginationService.pokemonPagination(this.pokemonDataTable, this.filterName);
+    this.pokemonDataTable = this._pokeApiPaginationService.pokemonPagination(this.pokemonDataTable, this.pokemonSearchTerms);
   }
 }

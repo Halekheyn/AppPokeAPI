@@ -22,12 +22,23 @@
           <tr>
             <th scope="col" class="bg-primary text-white">Id</th>
             <th scope="col" class="bg-primary text-white">
-              <input *ngIf="searchName; else notSearchName"
-                     #txtSearch
-                     (keyup)="pokemonSearch(txtSearch.value)">
-              <ng-template #notSearchName>Nombre </ng-template>
-              <i [ngClass]="{'fa-magnifying-glass': !searchName, 'fa-xmark': searchName}"
-                 class="fa-solid  ms-2" (click)="searchNameStatus()"></i>
+              <!-- Nombre -->
+              <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                  <search-box-thead
+                    *ngIf="pokemonSearchFlag.name; else notSearchName"
+                    [inputType]="'text'"
+                    (searchTerm)="pokemonSearch($event, 'name')">
+                  </search-box-thead>
+                </div>
+                <div class="col-sm-1">
+                  <ng-template #notSearchName>Nombre </ng-template>
+                  <i [ngClass]="{'fa-magnifying-glass': !pokemonSearchFlag.name, 'fa-xmark': pokemonSearchFlag.name}"
+                     class="fa-solid  ms-2"
+                     (click)="showSearch('name')">
+                  </i>
+                </div>
+              </div>
             </th>
             <th scope="col" class="bg-primary text-white">Imagen</th>
             <th scope="col" class="bg-primary text-white">Altura</th>

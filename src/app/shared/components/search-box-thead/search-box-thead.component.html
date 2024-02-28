@@ -1,0 +1,10 @@
+<input [type]="inputType"
+style="width: auto;"
+      class="form-control"
+      id="searchBoxThead"
+      name="searchBoxThead"
+      maxlength="3"
+      #searchBoxThead
+      (keyup)="setSearchTerm(searchBoxThead.value)"
+      (change)="setSearchTerm(searchBoxThead.value)">
+
